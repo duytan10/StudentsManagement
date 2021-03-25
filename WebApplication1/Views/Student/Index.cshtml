@@ -1,0 +1,30 @@
+﻿@{
+    ViewBag.Title = "Students";
+}
+@model List<WebApplication1.Models.StudentModels>
+<h2>Students List</h2>
+@Html.ActionLink("Create New", "Create")
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Last Name</th>
+            <th scope="col">First Mid Name</th>
+            <th scope="col">Enrollment Date</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            foreach (var student in Model)
+            {
+                <tr>
+                    <td>@student.LastName</td>
+                    <td>@student.FirstMidName</td>
+                    <td>@student.EnrollmentDate</td>
+                    <td>@Html.ActionLink("Edit", "Edit", new { id = student.Id }) | @Html.ActionLink("Details", "Details", new { id = student.Id }) | @Html.ActionLink("Delete", "Delete", new { id = student.Id })</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
