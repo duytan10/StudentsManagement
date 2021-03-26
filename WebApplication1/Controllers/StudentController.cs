@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using WebApplication1.Models;
+using PagedList;
 
 namespace WebApplication1.Controllers
 {
@@ -22,9 +23,50 @@ namespace WebApplication1.Controllers
         }
 
         // GET: Student
-        public ActionResult Index()
+        public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
-            return View(students);
+            ViewBag.CurrentSort = sortOrder;
+            ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewBag.CurrentFilter = searchString;
+
+            var student = from s in students
+                          select s;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                student = student.Where(item => item.FirstMidName.Contains(searchString) 
+                || item.LastName.Contains(searchString));
+            }
+
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    student = student.OrderByDescending(s => s.LastName);
+                    break;
+                case "Date":
+                    student = student.OrderBy(s => s.EnrollmentDate);
+                    break;
+                case "date_desc":
+                    student = student.OrderByDescending(s => s.EnrollmentDate);
+                    break;
+                default:
+                    student = student.OrderBy(s => s.LastName);
+                    break;
+            }
+
+            int pageSize = 3;
+            int pageNumber = (page ?? 1);
+            return View(student.ToPagedList(pageNumber, pageSize));
         }
 
         // GET: Student/Create

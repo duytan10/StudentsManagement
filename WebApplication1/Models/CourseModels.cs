@@ -7,13 +7,12 @@ using System.Web;
 
 namespace WebApplication1.Models
 {
-    public class StudentModels
+    public class CourseModels
     {
         [BsonId]
-        public ObjectId Id { get; set; }
-        public String LastName { get; set; }
-        public String FirstMidName { get; set; }
-        public DateTime EnrollmentDate { get; set; }
+        public ObjectId CourseId { get; set; }
+        public string Title { get; set; }
+        public int Credits { get; set; }
 
         public virtual ICollection<EnrollmentModels> Enrollments { get; set; }
     }
